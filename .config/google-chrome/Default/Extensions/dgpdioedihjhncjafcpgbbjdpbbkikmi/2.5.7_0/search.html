@@ -1,0 +1,156 @@
+<head>
+	<link rel="stylesheet" href="css/newtab.css" />
+	<title>Search</title>
+	<link rel="shortcut icon" type="image/x-icon" href="images/search.ico"/>
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery-cookie.js"></script>
+	<script language="JavaScript">
+
+		var slidese=true;
+		  if($.cookie("example") == 'foo'){
+		  }
+		  else {
+		  
+			// not first visit, so alert
+			slidese=false;
+		  }
+			function checkFirstVisit() {
+
+		}
+		$.cookie("example",null);
+		$(document).ready(function(){
+			
+			var href = window.location.hash.substring(1);
+			var l = document.createElement("a");
+			l.href = href;
+			var qs = l.search;
+			var vars = qs.split('&');
+			for (var i = 0; i < vars.length; i++) {
+				var pair = vars[i].split('=');
+				//if (decodeURIComponent(pair[0]) == variable) {
+				if (decodeURIComponent(pair[0]) == '?q')
+					var searchterm= decodeURIComponent(pair[1]);
+				//}
+			}	
+	
+		
+			$('#search-input').val(searchterm);
+			if (slidese){	
+				var position = $('#search-cont').offset();
+				$('#search-cont').css({'position':'absolute','left':position.left-40});
+			}
+			
+			$(document.body).append('<iframe frameBorder="0" id="a" style="position:absolute;top:0px;width:100%;height:100%;"/>');
+if (slidese){
+			$('iframe#a').ready(function(){
+				setTimeout(function(){
+					$('#search-cont').css({'-webkit-transition':'left 100ms ease-out','position':'absolute','left':'215px'});			
+				},20);
+			})
+			}else{
+			$('#search-cont').css({'position':'absolute','left':'215px'});			
+			}
+			$('iframe#a').load(function(){
+				$('#header').remove();
+			})			
+			$('iframe#a').attr('src', window.location.hash.substring(1));
+		});
+		
+	</script>
+<style>
+	#search-input{
+		padding: 3px 5px 4px;
+	}
+	#search-button {
+		cursor: pointer;
+		height: 28px;
+		padding: 0 5px;
+		width: 94px;
+		
+		font: 15px "Arial";		
+		line-height: 18px;				
+		color: white;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+		font-weight: bold;
+		background-color: #258DC8;
+		background-repeat: repeat-x;
+		
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-color: #096EB3;	
+		border-width:1px;				
+	}
+	#search-button:hover{
+		background-color: #2080C0;
+	}
+	#search-cont-col1 {
+		height:19px;
+		width:560px;
+		margin-right: 22px;
+		margin-top:1px;
+		
+	}
+
+	#search-button {
+		margin-top:1px;
+		cursor: pointer;
+		height: 28px;
+		padding: 0 5px;
+		width: 94px;
+
+		background-color: #3D94F6;
+		border-radius: 4px;
+		border: 1px solid #337FED;
+		color: white;
+		font-family: arial;
+		font-size: 14px;
+		font-weight: bold;
+		text-decoration: none;
+		text-shadow: 1px 1px 0px #1570CD;		
+	}
+	#search-strip {
+		height:71px;
+		border-bottom: 1px solid #D7D7D7;
+	}
+	#search-input {
+	font-size:17px;
+	
+	}
+</style>
+</head>
+<body onload="checkFirstVisit()">
+	<div id="header">
+		<div id="search-strip">
+			<div id="search-cont">
+				<div id="search-cont-col1">
+					<input type="text" id="search-input" onfocus="" onblur="" />
+				</div>
+				<button id="search-button" class='i18n' type="submit">Search</button>
+				
+			</div>	
+		</div>
+	</div>
+	<script>
+	function isLocalized(){
+		var locale = chrome.i18n.getMessage('@@ui_locale');
+		if (locale.substr(0,2) != 'en' && 'Search' == chrome.i18n.getMessage('search'))
+			return false;
+		return true;
+	}
+
+	function i18nTemplate(node){
+		var elements = node.querySelectorAll('.i18n');
+		for (var element, i = 0; element = elements[i]; i++) {
+			// search button, for not supported languages, show magnified lens instead of text
+			if ((element.id === 'search-btn') && (!isLocalized())) {
+				element.innerHTML = '';
+				element.setAttribute('class', element.getAttribute('class') + ' icon-search');
+				continue;
+			}
+			var text = element.textContent.toLowerCase().replace(/\s|\,/g,"_");
+			element.textContent = chrome.i18n.getMessage(text);
+		}
+	}
+	i18nTemplate(document);
+	</script>
+</body>

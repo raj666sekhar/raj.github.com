@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Video download helper</title>
+<style type="text/css">
+body{
+    background:#fff;
+}
+.clEN {
+    position:absolute;
+    left:10px;
+    right:10px;
+    top:10px;
+    bottom:10px;
+    font-size:12px;
+    font-family: arial, verdana, helvetica;
+    color:#000;
+    padding:10px;
+    background:#ddd;
+} 
+  
+</style>
+</head>
+
+<body>
+<div class="clEN" id="novideo">
+    <h2>No video found on this page</h2>
+    Did you try to start playback? Some sites required you to play the video before it can be downloaded.
+    <br />
+    <br />
+    Some video sites try to make it harder to download the video. If you want us to try to find a way for this page, <a href='#' id="idSubmitEN">submit this URL</a> to us.
+</div>
+</body>
+</html>
+<script>
+function get_param(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if (results == null)
+        return "";
+    else
+        return results[1];
+}
+
+function UploadUrl(url) {
+    var url2 = "";
+    var xmlHttpReq = new XMLHttpRequest();
+    xmlHttpReq.open("GET", url2, true);
+    xmlHttpReq.onreadystatechange = function(data) {
+        if (this.readyState != 4)
+            return;
+        alert("Thank you, we will give our best to support this site, too!");
+        window.close();
+    }
+    xmlHttpReq.send(null);
+}
+
+window.addEventListener("load", function() {
+    var url = get_param("url");
+    var o = document.getElementById("idSubmitEN");
+    o.addEventListener('click', function(data) {
+        UploadUrl(url);
+    });
+}, false);
+</script>
